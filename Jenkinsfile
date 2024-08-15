@@ -18,5 +18,8 @@ pipeline {
                 sh "npm run test:integration"
             }
         }
+        stage("deploy") {
+
+        }
     }
 }
