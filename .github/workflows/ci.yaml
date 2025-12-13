@@ -1,28 +1,32 @@
 name: CI
 
-# triggers
 on:
   push:
     branches: ["master"]
   workflow_dispatch:
-
-# what to do when triggered
 
 jobs:
   unit:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: install dependencies
+      - name: Install dependencies
         run: npm install
-      - name: unit test
+      - name: Unit test
         run: npm run test:unit
+
   integration:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: install dependencies
+      - name: Install dependencies
         run: npm install
-      - name: integration test
+      - name: Integration test
         run: npm run test:integration
-        
+      - name: Build & push Docker image
+        uses: mr-smithers-excellent/docker-build-push@v6
+        with:
+          image: docker-hub-repo/image-name
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
